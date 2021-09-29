@@ -1,10 +1,10 @@
 .container{
 	display: grid;
-	grid-template-rows: auto 1fr;
+	grid-template-rows: auto minmax(0, 1fr);
 	height: 100vh;
-	padding: 16px;
+	padding: var(--spacing);
 	box-sizing: border-box;
-	gap: 16px;
+	gap: var(--spacing);
 	overflow: hidden;
 }
 .headerBar {
@@ -13,11 +13,11 @@
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	gap: 16px;
+	gap: var(--spacing);
 }
 .options{
 	display: flex;
-	gap: 16px;
+	gap: var(--spacing);
 }
 .headerBar > * {
 	margin: 0;

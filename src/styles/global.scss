@@ -6,7 +6,7 @@
 
 body {
 	--background: #000;
-	--foreground: #181818;
+	--foreground: #1a1a1a;
 	--foreground-hover: #444;
 	--foreground-pressed: #333;
 	--foreground-border: #444;
@@ -16,6 +16,7 @@ body {
 	--accent: hsl(138, 93%, 51%);
 	--accent-foreground-pressed: hsl(138, 93%, 10%);
 	--text-accent: #000;
+	--spacing: 16px;
 }
 body{
 	margin: 0;
