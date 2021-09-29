@@ -12,7 +12,7 @@ const coursePage = () => {
 						Intro to Web Development
 					</span>
 					<span className={pageStyle.lessonName}>
-						The element - the basic building block of the web
+						Intro, and an important note
 					</span>
 				</div>
 				<div className={pageStyle.options}>

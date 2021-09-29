@@ -6,6 +6,7 @@ import { useState, useRef } from "react";
 
 export default function Editor({ initialCode, onChange, onRun, language }) {
 	const [editorCode, setEditorCode] = useState(null);
+	const editorRef = useRef(null);
 	return (
 		<div className={componentStyle.container}>
 			<MonacoEditor
@@ -17,15 +18,14 @@ export default function Editor({ initialCode, onChange, onRun, language }) {
 					automaticLayout: true,
 					fontSize: 16,
 				}}
-				value={initialCode}
-				onChange={(...args) => {
-					setEditorCode(args[0]);
-					onChange(...args);
-				}}
+				// value={initialCode}
+				defaultValue={initialCode}
+				onChange={onChange || null}
+				onMount={editor => (editorRef.current = editor)}
 			/>
 			<Button
 				icon="play_arrow"
-				onClick={_ => onRun && onRun(editorCode)}
+				onClick={_ => onRun && onRun(editorRef.current.getValue())}
 				className={componentStyle.runButton}
 				accent
 			>
