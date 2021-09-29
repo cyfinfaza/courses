@@ -2,8 +2,9 @@ import React from "react";
 import * as layoutStyle from "./threePartLayout.module.scss";
 import MonacoEditor from "react-monaco-editor";
 import * as monaco from "monaco-editor";
-import { useRef, useEffect } from "react";
-import Editor from "@monaco-editor/react";
+import { useRef, useEffect, useState } from "react";
+import Editor from "../environments/editor";
+import HtmlFrame from "../environments/htmlFrame";
 
 export default function ThreePartLayout(props) {
 	// const editorElemRef = useRef(null);
@@ -14,43 +15,33 @@ export default function ThreePartLayout(props) {
 	// 		theme: "vs-dark",
 	// 	});
 	// }, []);
+	const [editorCode, setEditorCode] = useState(
+		`
+<html>
+	<body>
+		<h1>Hello World</h1>
+	</body>
+</html>`.trim()
+	);
 	return (
 		<>
 			<div className={layoutStyle.container}>
 				<div className={layoutStyle.lessonDescription}>
 					<h1>Welcome</h1>
 					<p>This is some lesson content.</p>
+					<h2>Want some placeholder?</h2>
+					<p>Here you go</p>
+					<p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
 				</div>
 				<div className={layoutStyle.editor}>
-					{/* <MonacoEditor
-						theme="vs-dark"
-						language="java"
-						options={{
-							minimap: { enabled: false },
-							cursorSmoothCaretAnimation: true,
-							// automaticLayout: true,
-						}}
-					/> */}
 					<Editor
-						theme="vs-dark"
 						language="html"
-						options={{
-							minimap: { enabled: false },
-							cursorSmoothCaretAnimation: true,
-							automaticLayout: true,
-						}}
-						onMount={(editor, monaco) => {
-							window.layout = editor.layout;
-						}}
+						initialCode={editorCode}
+						onRun={setEditorCode}
 					/>
-					{/* <div ref={editorElemRef} /> */}
 				</div>
 				<div className={layoutStyle.output}>
-					<iframe
-						src="https://cy2.me"
-						frameBorder="0"
-						title="code output"
-					></iframe>
+					<HtmlFrame code={editorCode} />
 				</div>
 			</div>
 		</>
