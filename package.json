@@ -1,29 +1,26 @@
 {
-  "name": "courses",
-  "version": "1.0.0",
-  "private": true,
-  "description": "courses",
-  "author": "cyfinfaza",
-  "keywords": [
-    "gatsby"
-  ],
-  "scripts": {
-    "develop": "gatsby develop",
-    "start": "gatsby develop",
-    "build": "gatsby build",
-    "serve": "gatsby serve",
-    "clean": "gatsby clean"
-  },
-  "dependencies": {
-    "@material-ui/icons": "^4.11.2",
-    "@monaco-editor/react": "^4.2.2",
-    "gatsby": "^3.13.1",
-    "gatsby-plugin-sass": "^4.14.0",
-    "monaco-editor": "^0.28.1",
-    "monaco-editor-webpack-plugin": "^4.2.0",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "react-monaco-editor": "^0.45.0",
-    "sass": "^1.42.1"
-  }
+	"name": "courses",
+	"version": "1.0.0",
+	"private": true,
+	"description": "courses",
+	"author": "cyfinfaza",
+	"keywords": [
+		"gatsby"
+	],
+	"scripts": {
+		"develop": "gatsby develop",
+		"start": "gatsby develop",
+		"build": "gatsby build",
+		"serve": "gatsby serve",
+		"clean": "gatsby clean"
+	},
+	"dependencies": {
+		"@material-ui/icons": "^4.11.2",
+		"@monaco-editor/react": "^4.2.2",
+		"gatsby": "^3.13.1",
+		"gatsby-plugin-sass": "^4.14.0",
+		"react": "^17.0.1",
+		"react-dom": "^17.0.1",
+		"sass": "^1.42.1"
+	}
 }

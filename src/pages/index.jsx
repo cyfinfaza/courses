@@ -1,7 +1,9 @@
 import * as React from "react";
 
+const isBrowser = typeof window !== "undefined";
+
 const IndexPage = () => {
-	window && (window.location = "/course");
+	isBrowser && (window.location = "/course");
 	return (
 		<p>
 			Visit <a href="/course">course page</a>

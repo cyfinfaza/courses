@@ -1,7 +1,5 @@
 import React from "react";
 import * as layoutStyle from "./threePartLayout.module.scss";
-import MonacoEditor from "react-monaco-editor";
-import * as monaco from "monaco-editor";
 import { useRef, useEffect, useState } from "react";
 import Editor from "../environments/editor";
 import HtmlFrame from "../environments/htmlFrame";
