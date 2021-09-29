@@ -1,0 +1,41 @@
+.button{
+	display: flex;
+	height: 50px;
+	align-items: center;
+	padding: 12px;
+	border-radius: 6px;
+	border: solid 1px;
+	cursor: pointer;
+	transition: 240ms;
+	user-select: none;
+	&:active{
+		transition: 120ms;
+	}
+	white-space: nowrap;
+}
+.button:not(.accent){
+	border-color: var(--foreground-border);
+	&:hover, &:active {
+		background-color: var(--foreground-hover);
+		border-color: var(--foreground-border-hover);
+	}
+	&:active {
+		background-color: var(--foreground-pressed);
+		border-color: var(--foreground-border-pressed);
+	}
+}
+.accent{
+	background-color: var(--accent);
+	color: var(--text-accent);
+	border-color: var(--accent);
+	&:hover, &:active {
+		background-color: var(--background);
+		color: var(--accent);
+	}
+	&:active {
+		background-color: var(--accent-foreground-pressed);
+	}
+}
+.buttonIcon {
+	margin-right: 4px;
+}

@@ -1,0 +1,34 @@
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons+Round');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&display=swap');
+
+
+body {
+	--background: #000;
+	--foreground: #181818;
+	--foreground-hover: #444;
+	--foreground-pressed: #333;
+	--foreground-border: #444;
+	--foreground-border-hover: #666;
+	--foreground-border-pressed: #555;
+	--text: #FFF;
+	--accent: hsl(138, 93%, 51%);
+	--accent-foreground-pressed: hsl(138, 93%, 10%);
+	--text-accent: #000;
+}
+body{
+	margin: 0;
+	width: 100vw;
+	height: 100vh;
+	background: var(--background);
+	-webkit-tap-highlight-color: transparent;
+}
+body, input, button, textarea, select, a {
+	font-family: "Lexend", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+	color: var(--text);
+}
+
+button{
+	background: var(--foreground);
+}
