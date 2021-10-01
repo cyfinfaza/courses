@@ -2,7 +2,6 @@ import * as React from "react";
 import Button from "../ui-components/button";
 import ThreePartLayout from "../layouts/threePartLayout";
 import * as pageStyle from "./course.module.scss";
-import SigninButton from "../ui-components/signInButton";
 
 const coursePage = () => {
 	return (
