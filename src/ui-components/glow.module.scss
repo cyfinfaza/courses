@@ -1,0 +1,10 @@
+.container{
+	position: relative;
+	> *:nth-child(1) {
+		position: absolute;
+		z-index: 10;
+	}
+	> *:nth-child(2) {
+		filter: blur(72px);
+	}
+}

@@ -1,0 +1,60 @@
+.input{
+	display: flex;
+	height: 50px;
+	align-items: center;
+	padding: 12px;
+	border-radius: 6px;
+	border: solid 1px;
+	// cursor: pointer;
+	transition: --local-text-color 240ms, background-color 240ms;
+	user-select: none;
+	&:active{
+		transition: --local-text-color 120ms, background-color 120ms;
+	}
+	white-space: nowrap;
+	position: relative;
+	box-sizing: border-box;
+	background-color: var(--foreground);
+	--local-text-color: var(--text);
+	color: var(--local-text-color);
+	backdrop-filter: blur(16px) saturate(180%);
+	text-decoration: none;
+}
+button.input{
+	cursor: pointer;
+}
+.input:not(.accent){
+	border-color: var(--foreground-border);
+	&:hover, &:active {
+		background-color: var(--foreground-hover);
+		border-color: var(--foreground-border-hover);
+	}
+	&:active {
+		background-color: var(--foreground-pressed);
+		border-color: var(--foreground-border-pressed);
+	}
+}
+.accent{
+	background-color: var(--accent);
+	--local-text-color: var(--accent-text);
+	border-color: var(--accent);
+	&:hover, &:active {
+		background-color: var(--accent-foreground-hover);
+		--local-text-color: var(--accent);
+	}
+	&:active {
+		background-color: var(--accent-foreground-pressed);
+	}
+}
+.buttonIcon {
+	margin-right: 4px;
+}
+.buttonIconElementContainer {
+	width: 20px;
+	height: 20px;
+	fill: var(--local-text-color);
+	margin-right: 8px;
+	transition: inherit;
+	display: flex;
+	align-items: center;
+}

@@ -1,0 +1,20 @@
+.container {
+	display: flex;
+	background-color: var(--foreground);
+	border-radius: 6px;
+	overflow: hidden;
+}
+.providers{
+	display: flex;
+	height: 100%;
+	gap: calc(var(--spacing) * 0.5);
+	padding: calc(var(--spacing) * 0.5);
+	padding-top: calc(var(--spacing) * 0.5);
+	padding-bottom: calc(var(--spacing) * 0.5);
+	box-sizing: border-box;
+	overflow: hidden;
+	> * {
+		height: 34px;
+		box-sizing: border-box;
+	}
+}
