@@ -1,8 +1,6 @@
 import * as React from "react";
-import Logo from "../assets/logo.inline.svg";
 import Button from "../ui-components/button";
 import Glow from "../ui-components/glow";
-import Input from "../ui-components/input";
 import * as pageStyle from "./signin.module.scss";
 
 const SigninPage = () => {
