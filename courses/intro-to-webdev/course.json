@@ -2,6 +2,7 @@
 	"title": "Web Development",
 	"description": "Get started building web frontends and user-interfaces.",
 	"author": "Cy",
+	"id": "647320ad-037f-4bd4-b144-89370474ccf9",
 	"lessons": [
 		{
 			"file": "intro",

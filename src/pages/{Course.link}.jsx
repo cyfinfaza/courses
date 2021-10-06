@@ -2,11 +2,13 @@ import * as React from "react";
 import Button from "../ui-components/button";
 import * as pageStyle from "./course.module.scss";
 import { graphql } from "gatsby";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import DatabaseInterface from "../logic/database";
+import SigninButton from "../ui-components/signInButton";
 
 const isBrowser = typeof window !== "undefined";
 
-export default ({ data }) => {
+const CoursePage = ({ data }) => {
 	const { course } = data;
 	const [lessonNumber, setLessonNumber] = useState(0);
 	const [LessonComponent, setLessonComponent] = useState(null);
@@ -20,6 +22,15 @@ export default ({ data }) => {
 			)
 		);
 	}, [lessonNumber]);
+	const [session, setSession] = useState(null);
+	const db = useRef();
+	useEffect(function () {
+		async function effect() {
+			db.current = new DatabaseInterface(setSession);
+			await db.current.init();
+		}
+		effect();
+	}, []);
 	function incrementLesson(howMuch) {
 		const index = lessonNumber + howMuch;
 		if (course.lessons[index]) {
@@ -54,9 +65,7 @@ export default ({ data }) => {
 					<Button icon="home" linksTo="/">
 						Home
 					</Button>
-					<Button accent icon="login" linksTo="/signin">
-						Sign In
-					</Button>
+					<SigninButton session={session} db={db} />
 				</div>
 			</div>
 			{isBrowser && LessonComponent ? (
@@ -69,6 +78,8 @@ export default ({ data }) => {
 		</div>
 	);
 };
+
+export default CoursePage;
 
 export const pageQuery = graphql`
 	query ($id: String!) {

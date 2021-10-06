@@ -3,7 +3,7 @@ import { graphql } from "gatsby";
 import Button from "../ui-components/button";
 import AniLink from "gatsby-plugin-transition-link/AniLink";
 
-export default ({ data }) => {
+export default function IndexPage({ data }) {
 	return (
 		<div style={{ margin: "16px" }}>
 			<h1>Welcome.</h1>
@@ -31,7 +31,7 @@ export default ({ data }) => {
 			</ul>
 		</div>
 	);
-};
+}
 
 export const query = graphql`
 	query {

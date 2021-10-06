@@ -2,7 +2,9 @@ import React from "react";
 import ThreePartLayout from "/src/layouts/threePartLayout";
 import cubeCode from "./cubeCode";
 
-export default function () {
+export const id = "647320ad-037f-4bd4-b144-89370474ccf9";
+
+export default function Lesson() {
 	return (
 		<ThreePartLayout
 			directions={
