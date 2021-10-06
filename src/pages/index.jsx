@@ -1,6 +1,7 @@
 import * as React from "react";
 import { graphql } from "gatsby";
 import Button from "../ui-components/button";
+import AniLink from "gatsby-plugin-transition-link/AniLink";
 
 export default ({ data }) => {
 	return (

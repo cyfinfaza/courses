@@ -1,6 +1,7 @@
 import React from "react";
 import * as componentStyle from "./inputs.module.scss";
 import { Link } from "gatsby";
+import AniLink from "gatsby-plugin-transition-link/AniLink";
 
 export default function Button({
 	linksTo,
@@ -41,9 +42,18 @@ export default function Button({
 	};
 	if (linksTo) {
 		return (
-			<Link to={linksTo} {...globalProps}>
+			// <Link to={linksTo} {...globalProps}>
+			// 	{content}
+			// </Link>
+			<AniLink
+				paintDrip
+				to={linksTo}
+				color="#000"
+				duration={0.75}
+				{...globalProps}
+			>
 				{content}
-			</Link>
+			</AniLink>
 		);
 	} else {
 		return (
