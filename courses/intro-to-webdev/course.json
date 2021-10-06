@@ -1,0 +1,15 @@
+{
+	"title": "Web Development",
+	"description": "Get started building web frontends and user-interfaces.",
+	"author": "Cy",
+	"lessons": [
+		{
+			"file": "intro",
+			"title": "Intro, and an important note"
+		},
+		{
+			"file": "lesson2",
+			"title": "Lesson 2 - still needs a name"
+		}
+	]
+}

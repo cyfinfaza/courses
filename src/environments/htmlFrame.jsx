@@ -7,7 +7,7 @@ export default function HtmlFrame({
 	onActionsReady,
 	...props
 }) {
-	console.log(code);
+	// console.log(code);
 	const frameRef = useRef(null);
 	function refresh() {
 		frameRef.current.contentWindow.location.reload();

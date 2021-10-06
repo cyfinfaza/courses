@@ -12,6 +12,7 @@ export default function Button({
 	style,
 	className,
 }) {
+	console.log(icon && children);
 	const content = (
 		<>
 			{iconElement ? (
@@ -20,7 +21,10 @@ export default function Button({
 				</div>
 			) : (
 				icon && (
-					<span className={`material-icons-round ${componentStyle.buttonIcon}`}>
+					<span
+						className={`material-icons-round ${componentStyle.buttonIcon}`}
+						style={icon && children ? null : { margin: "0" }}
+					>
 						{icon}
 					</span>
 				)
