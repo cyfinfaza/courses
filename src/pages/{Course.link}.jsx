@@ -4,7 +4,7 @@ import * as pageStyle from "./course.module.scss";
 import { graphql } from "gatsby";
 import { useState, useEffect, useRef } from "react";
 import DatabaseInterface from "../logic/database";
-import SigninButton from "../ui-components/signInButton";
+import SigninButton from "../ui-components/signinButton";
 
 const isBrowser = typeof window !== "undefined";
 
