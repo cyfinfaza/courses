@@ -5,6 +5,9 @@ import * as componentStyle from "./signinButton.module.scss";
 
 const SigninButton = ({ session, db }) => {
 	const [popOutOpen, setPopOutOpen] = useState(false);
+	function login(provider) {
+		db.current.login(provider, window.location.href);
+	}
 	return (
 		<div
 			className={componentStyle.container}
@@ -58,7 +61,13 @@ const SigninButton = ({ session, db }) => {
 								<span>{session.user.user_metadata.user_name}</span>
 							</div>
 						</div>
-						<Button icon="logout" onClick={_ => db.current.logout()}>
+						<Button
+							icon="logout"
+							onClick={_ => {
+								db.current.logout();
+								setPopOutOpen(false);
+							}}
+						>
 							Sign Out
 						</Button>
 					</div>
@@ -77,9 +86,7 @@ const SigninButton = ({ session, db }) => {
 									</svg>
 								}
 								accent
-								onClick={_ =>
-									db.current.login("github", window.location.pathname)
-								}
+								onClick={_ => login("github")}
 							>
 								GitHub
 							</Button>
@@ -90,6 +97,7 @@ const SigninButton = ({ session, db }) => {
 									</svg>
 								}
 								accent
+								onClick={_ => login("google")}
 							>
 								Google
 							</Button>
@@ -107,6 +115,7 @@ const SigninButton = ({ session, db }) => {
 									</svg>
 								}
 								accent
+								onClick={_ => login("discord")}
 							>
 								Discord
 							</Button>
