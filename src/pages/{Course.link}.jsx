@@ -55,9 +55,7 @@ const CoursePage = ({ data }) => {
 						></Button>
 					</div>
 					<div className={pageStyle.titles}>
-						<span className={pageStyle.courseTitle}>
-							{course.title} <code>{course.id}</code>
-						</span>
+						<span className={pageStyle.courseTitle}>{course.title}</span>
 						<span className={pageStyle.lessonName}>
 							{course.lessons[lessonNumber].title}
 						</span>
