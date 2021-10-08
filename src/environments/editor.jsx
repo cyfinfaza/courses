@@ -33,12 +33,19 @@ export default function Editor({
 					minimap: { enabled: false },
 					cursorSmoothCaretAnimation: true,
 					automaticLayout: true,
-					fontSize: 16,
+					fontSize: 15,
+					fontLigatures: true,
+					fontFamily: '"Jetbrains Mono", monospace',
 				}}
 				value={initialCode}
 				// defaultValue={initialCode}
 				onChange={onChange || null}
-				onMount={editor => (editorRef.current = editor)}
+				onMount={(editor, monaco) => {
+					editorRef.current = editor;
+					document.fonts.ready.then(() => {
+						monaco.editor.remeasureFonts();
+					});
+				}}
 			/>
 			<div className={`horizPanel ${componentStyle.controls}`}>
 				{revertButton && (

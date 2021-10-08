@@ -1,8 +1,11 @@
 import { createClient } from "@supabase/supabase-js";
 
 export default class DatabaseInterface {
-	constructor(sessionChangeCallback) {
+	constructor(sessionChangeCallback, saveStateChangeCallback) {
 		this.onSessionChange = sessionChangeCallback;
+		this.onSaveStateChange = args =>
+			saveStateChangeCallback && saveStateChangeCallback(args);
+		this.onSaveStateChange("local_saved");
 		this.sess = null;
 		this.updateJobs = {};
 		this.onReadyJobs = [];
@@ -24,55 +27,61 @@ export default class DatabaseInterface {
 			this.sess = sess;
 			if (sess) {
 				this.onReadyJobs.forEach(job => job());
-				const store = window.localStorage.getItem("lesson_work");
-				const localData = store ? JSON.parse(store) : null;
-				if (localData) {
-					const { data: cloudData, error } = await this.supabase
-						.from("lesson_work")
-						.select("*");
-					if (error) {
-						console.error(error);
-					} else {
-						Object.values(localData).forEach(localLesson => {
-							const cloudLesson = cloudData.filter(
-								elem =>
-									elem.courseId == localLesson.courseId &&
-									elem.lessonId == localLesson.lessonId
-							)[0];
-							// if(cloudLesson && (new Date(cloudLesson.modified_at) > new Date(localLesson.modified_at))){
-							if (cloudLesson) {
-								// this.removeLocally({
-								// 	courseId: localLesson.courseId,
-								// 	lessonId: localLesson.lessonId,
-								// });
-								return;
-							}
-							this.updateJobs[
-								JSON.stringify({
-									courseId: localLesson.courseId,
-									lessonId: localLesson.lessonId,
-								})
-							] = localLesson;
-						});
+				["lesson_work", "course_progress"].forEach(async table => {
+					const store = window.localStorage.getItem(table);
+					const localData = store ? JSON.parse(store) : null;
+					if (localData) {
+						const { data: cloudData, error } = await this.supabase
+							.from(table)
+							.select("*");
+						if (error) {
+							console.error(error);
+						} else {
+							Object.values(localData).forEach(localEntry => {
+								const cloudLesson = cloudData.filter(elem =>
+									["lessonId", "courseId"].every(primaryKey =>
+										elem[primaryKey]
+											? elem[primaryKey] === localEntry[primaryKey]
+											: true
+									)
+								)[0];
+								// if(cloudLesson && (new Date(cloudLesson.modified_at) > new Date(localEntry.modified_at))){
+								if (cloudLesson) {
+									return;
+								}
+								this.updateJobs[
+									JSON.stringify({
+										...["lessonId", "courseId"].reduce((prev, curr) => ({
+											...prev,
+											[curr]: localEntry[curr],
+										})),
+										table,
+									})
+								] = { table, entry: localEntry };
+							});
+						}
+						localStorage.removeItem(table);
 					}
-					localStorage.removeItem("lesson_work");
-				}
+				});
 			} else {
 				this.onLogoutJobs.forEach(job => job());
+				this.onSaveStateChange("local_saved");
 			}
 			// this.refresh();
 		});
 		setInterval(_ => {
 			Object.keys(this.updateJobs).forEach(async key => {
-				let { error } = await this.supabase
-					.from("lesson_work")
-					.upsert(this.updateJobs[key]);
+				const { table, entry } = this.updateJobs[key];
+				let { error } = await this.supabase.from(table).upsert(entry);
 				if (error) {
 					console.error(error);
 				} else {
 					delete this.updateJobs[key];
 				}
 			});
+			if (Object.keys(this.updateJobs).length === 0 && this.sess) {
+				this.onSaveStateChange("online_saved");
+			}
 		}, 1000);
 	}
 	async login(provider, redirect = "/") {
@@ -99,33 +108,32 @@ export default class DatabaseInterface {
 		this.onReadyJobs = this.onReadyJobs.splice(0, 1);
 		this.onLogoutJobs = this.onLogoutJobs.splice(0, 1);
 	}
-	getLocally({ courseId, lessonId }) {
-		const store = window.localStorage.getItem("lesson_work");
+	getLocally(table, primaryKeys) {
+		const store = window.localStorage.getItem(table);
 		if (store) {
-			const localData =
-				JSON.parse(store)[JSON.stringify({ courseId, lessonId })];
+			const localData = JSON.parse(store)[JSON.stringify({ ...primaryKeys })];
 			console.log(localData);
-			return localData ? JSON.parse(localData.data) : null;
+			return localData || null;
 		} else {
 			return null;
 		}
 	}
-	setLocally({ courseId, lessonId }, data) {
-		const store = window.localStorage.getItem("lesson_work");
+	setLocally(table, primaryKeys, data) {
+		const store = window.localStorage.getItem(table);
 		let oldData = store ? JSON.parse(store) : {};
 		window.localStorage.setItem(
-			"lesson_work",
+			table,
 			JSON.stringify({
 				...oldData,
-				[JSON.stringify({ courseId, lessonId })]: data,
+				[JSON.stringify({ ...primaryKeys })]: data,
 			})
 		);
 	}
-	removeLocally({ courseId, lessonId }) {
-		const store = window.localStorage.getItem("lesson_work");
+	removeLocally(table, primaryKeys) {
+		const store = window.localStorage.getItem(table);
 		let oldData = store ? JSON.parse(store) : {};
-		delete oldData[JSON.stringify({ courseId, lessonId })];
-		window.localStorage.setItem("lesson_work", JSON.stringify(oldData));
+		delete oldData[JSON.stringify({ ...primaryKeys })];
+		window.localStorage.setItem(table, JSON.stringify(oldData));
 	}
 	async getStoredLessonData(courseId, lessonId) {
 		if (this.sess) {
@@ -139,22 +147,56 @@ export default class DatabaseInterface {
 			if (error) {
 				console.error(error);
 			} else {
-				return results[0] ? JSON.parse(results[0].data) : null;
+				return results[0] ? results[0].data : null;
 			}
 		}
-		return this.getLocally({ courseId, lessonId });
+		const localData = this.getLocally("lesson_work", { courseId, lessonId });
+		return localData ? JSON.parse(localData.data) : null;
 	}
 	async setStoredLessonData(courseId, lessonId, data) {
-		const newData = {
+		const table = "lesson_work";
+		const entry = {
 			course_id: courseId,
 			lesson_id: lessonId,
 			modified_at: new Date(Date.now()).toISOString(),
-			data: JSON.stringify(data),
+			data: data,
 		};
 		if (this.sess) {
-			this.updateJobs[{ courseId, lessonId }] = newData;
+			this.updateJobs[{ courseId, lessonId, table }] = { entry, table };
+			this.onSaveStateChange("online_saving");
 		} else {
-			this.setLocally({ courseId, lessonId }, newData);
+			this.setLocally("lesson_work", { courseId, lessonId }, entry);
+		}
+	}
+	async getStoredCourseData(courseId) {
+		if (this.sess) {
+			let { data: results, error } = await this.supabase
+				.from("course_progress")
+				.select("data")
+				.eq("course_id", courseId);
+			console.log(results);
+			// console.log("retrieved from supabase");
+			if (error) {
+				console.error(error);
+			} else {
+				return results[0] ? results[0].data : null;
+			}
+		}
+		const localData = this.getLocally("course_progress", { courseId });
+		return localData ? JSON.parse(localData.data) : null;
+	}
+	async setStoredCourseData(courseId, data) {
+		const table = "course_progress";
+		const entry = {
+			course_id: courseId,
+			modified_at: new Date(Date.now()).toISOString(),
+			data: data,
+		};
+		if (this.sess) {
+			this.updateJobs[{ courseId, table }] = { entry, table };
+			this.onSaveStateChange("online_saving");
+		} else {
+			this.setLocally("course_progress", { courseId }, entry);
 		}
 	}
 	logout() {
