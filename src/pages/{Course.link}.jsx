@@ -12,7 +12,6 @@ const isBrowser = typeof window !== "undefined";
 const CoursePage = ({ data }) => {
 	const { course } = data;
 	const [lessonNumber, setLessonNumber] = useState(null);
-	window.lessonNumber = lessonNumber;
 	const [LessonComponent, setLessonComponent] = useState(null);
 	useEffect(() => {
 		console.log(lessonNumber);
