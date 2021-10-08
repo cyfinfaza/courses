@@ -55,7 +55,9 @@ const CoursePage = ({ data }) => {
 						></Button>
 					</div>
 					<div className={pageStyle.titles}>
-						<span className={pageStyle.courseTitle}>{course.title}</span>
+						<span className={pageStyle.courseTitle}>
+							{course.title} <code>{course.id}</code>
+						</span>
 						<span className={pageStyle.lessonName}>
 							{course.lessons[lessonNumber].title}
 						</span>
@@ -70,7 +72,7 @@ const CoursePage = ({ data }) => {
 			</div>
 			{isBrowser && LessonComponent ? (
 				<React.Suspense fallback={<span></span>}>
-					<LessonComponent />
+					<LessonComponent db={db} session={session} courseId={course.id} />
 				</React.Suspense>
 			) : (
 				<span></span>
@@ -85,6 +87,7 @@ export const pageQuery = graphql`
 	query ($id: String!) {
 		course(id: { eq: $id }) {
 			title
+			id
 			lessons {
 				file
 				title

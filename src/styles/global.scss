@@ -19,6 +19,10 @@ body {
 	--accent-foreground-pressed: hsla(138, 93%, 51%, 20%);
 	--accent-foreground-hover: #0008;
 	--accent-text: #000;
+	--alert: hsl(0, 100%, 50%);
+	--alert-foreground-pressed: hsl(0, 100%, 10%);
+	--alert-foreground-hover: #0008;
+	--alert-text: #000;
 	--acrylic-backdrop: blur(16px) saturate(180%);
 	--spacing: 16px;
 }

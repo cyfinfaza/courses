@@ -20,20 +20,20 @@
 	backdrop-filter: blur(16px) saturate(180%);
 	text-decoration: none;
 	font-size: 14px;
+	&:not(.accent):not(.alert){
+		border-color: var(--foreground-border);
+		&:hover, &:active {
+			background-color: var(--foreground-hover);
+			border-color: var(--foreground-border-hover);
+		}
+		&:active {
+			background-color: var(--foreground-pressed);
+			border-color: var(--foreground-border-pressed);
+		}
+	}
 }
 button.input{
 	cursor: pointer;
-}
-.input:not(.accent){
-	border-color: var(--foreground-border);
-	&:hover, &:active {
-		background-color: var(--foreground-hover);
-		border-color: var(--foreground-border-hover);
-	}
-	&:active {
-		background-color: var(--foreground-pressed);
-		border-color: var(--foreground-border-pressed);
-	}
 }
 .accent{
 	background-color: var(--accent);
@@ -45,6 +45,18 @@ button.input{
 	}
 	&:active {
 		background-color: var(--accent-foreground-pressed);
+	}
+}
+.alert {
+	background-color: var(--alert);
+	--local-text-color: var(--alert-text);
+	border-color: var(--alert);
+	&:hover, &:active {
+		background-color: var(--alert-foreground-hover);
+		--local-text-color: var(--alert);
+	}
+	&:active {
+		background-color: var(--alert-foreground-pressed);
 	}
 }
 .buttonIcon {

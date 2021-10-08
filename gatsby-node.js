@@ -3,26 +3,43 @@ const path = require(`path`);
 
 const coursesPath = path.resolve("./courses");
 
-const courses = fs
-	.readdirSync(coursesPath, { withFileTypes: true })
-	.filter(dirent => dirent.isDirectory())
-	.map(dirent => dirent.name);
-console.log(courses);
+async function getCourseData() {
+	const courses = fs
+		.readdirSync(coursesPath, { withFileTypes: true })
+		.filter(dirent => dirent.isDirectory())
+		.map(dirent => dirent.name);
+	console.log(courses);
 
-const courseMetadata = courses.map(courseDirectory => {
-	const courseFile = fs.readFileSync(
-		path.join(coursesPath, courseDirectory, "course.json")
-	);
-	return {
-		...JSON.parse(courseFile),
-		key: courseDirectory,
-		link: `/${courseDirectory}`,
-	};
-});
+	return courses.map(courseDirectory => {
+		const courseFile = fs.readFileSync(
+			path.join(coursesPath, courseDirectory, "course.json")
+		);
+		let courseData = JSON.parse(courseFile);
+		// courseData = {
+		// 	...courseData,
+		// 	lessons: courseData.lessons.map(async lesson => {
+		// 		const lessonComponent = import(
+		// 			path.join(coursesPath, courseDirectory, "/lessons/", lesson.file)
+		// 		);
+		// 		return { ...lesson, id: lessonComponent.id };
+		// 	}),
+		// };
+		return {
+			...courseData,
+			key: courseDirectory,
+			link: `/${courseDirectory}`,
+		};
+	});
+}
 
-exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
+exports.sourceNodes = async ({
+	actions,
+	createNodeId,
+	createContentDigest,
+}) => {
 	const { createNode } = actions;
-	courseMetadata.forEach(courseMetadataObject => {
+	const courseData = await getCourseData();
+	courseData.forEach(courseMetadataObject => {
 		const data = courseMetadataObject;
 		createNode(
 			Object.assign({}, data, {

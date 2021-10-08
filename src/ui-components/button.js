@@ -2,6 +2,7 @@ import React from "react";
 import * as componentStyle from "./inputs.module.scss";
 import { Link } from "gatsby";
 import AniLink from "gatsby-plugin-transition-link/AniLink";
+import { useState } from "react";
 
 export default function Button({
 	linksTo,
@@ -12,8 +13,10 @@ export default function Button({
 	accent,
 	style,
 	className,
+	confirm = false,
 }) {
-	console.log(icon && children);
+	// console.log(icon && children);
+	const [confirmActive, setConfirmActive] = useState(false);
 	const content = (
 		<>
 			{iconElement ? (
@@ -30,13 +33,14 @@ export default function Button({
 					</span>
 				)
 			)}
-			{children}
+			{confirmActive ? "Are you sure?" : children}
 		</>
 	);
 	const globalProps = {
 		className:
 			componentStyle.input +
 			(accent ? " " + componentStyle.accent : "") +
+			(confirmActive ? " " + componentStyle.alert : "") +
 			(className ? " " + className : ""),
 		style: style,
 	};
@@ -57,7 +61,22 @@ export default function Button({
 		);
 	} else {
 		return (
-			<button onClick={onClick} {...globalProps}>
+			<button
+				onBlur={_ => setConfirmActive(false)}
+				onClick={args => {
+					if (confirm) {
+						if (confirmActive) {
+							setConfirmActive(false);
+							onClick(args);
+						} else {
+							setConfirmActive(true);
+						}
+					} else {
+						onClick(args);
+					}
+				}}
+				{...globalProps}
+			>
 				{content}
 			</button>
 		);

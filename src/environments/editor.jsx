@@ -5,7 +5,14 @@ import Button from "../ui-components/button";
 import { useState, useRef } from "react";
 import HotkeyLabel from "../ui-components/hotkeyLabel";
 
-export default function Editor({ initialCode, onChange, onRun, language }) {
+export default function Editor({
+	initialCode,
+	onChange,
+	onRun,
+	language,
+	onRevert,
+	revertButton,
+}) {
 	const [editorCode, setEditorCode] = useState(null);
 	const editorRef = useRef(null);
 	const run = _ => onRun && onRun(editorRef.current.getValue());
@@ -28,19 +35,25 @@ export default function Editor({ initialCode, onChange, onRun, language }) {
 					automaticLayout: true,
 					fontSize: 16,
 				}}
-				// value={initialCode}
-				defaultValue={initialCode}
+				value={initialCode}
+				// defaultValue={initialCode}
 				onChange={onChange || null}
 				onMount={editor => (editorRef.current = editor)}
 			/>
-			<Button
-				icon="play_arrow"
-				onClick={run}
-				className={componentStyle.runButton}
-				accent
-			>
-				<HotkeyLabel hotkey={["ctrl", "s"]}>Run</HotkeyLabel>
-			</Button>
+			<div className={`horizPanel ${componentStyle.controls}`}>
+				{revertButton && (
+					<Button
+						onClick={_ => onRevert && onRevert()}
+						confirm
+						icon="restart_alt"
+					>
+						Reset
+					</Button>
+				)}
+				<Button icon="play_arrow" onClick={run} accent>
+					<HotkeyLabel hotkey={["ctrl", "s"]}>Run</HotkeyLabel>
+				</Button>
+			</div>
 		</div>
 	);
 }

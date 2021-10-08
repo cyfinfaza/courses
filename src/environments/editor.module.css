@@ -3,7 +3,7 @@
 	height: 100%;
 	position: relative;
 }
-.runButton{
+.controls{
 	position: absolute;
 	bottom: var(--spacing);
 	right: var(--spacing);
