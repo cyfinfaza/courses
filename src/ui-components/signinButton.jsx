@@ -6,7 +6,7 @@ import * as componentStyle from "./signinButton.module.scss";
 const SigninButton = ({ session, db }) => {
 	const [popOutOpen, setPopOutOpen] = useState(false);
 	function login(provider) {
-		db.current.login(provider, window.location.pathname);
+		db.current.login(provider, window.location.href);
 	}
 	return (
 		<div

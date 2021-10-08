@@ -82,7 +82,7 @@ export default class DatabaseInterface {
 				provider: provider,
 			},
 			{
-				redirectTo: window.location.origin + redirect,
+				redirectTo: redirect,
 			}
 		);
 	}
