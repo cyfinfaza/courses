@@ -17,7 +17,6 @@ export default function ThreePartLayout({
 	useEffect(() => {
 		let initFromDb = async () => {
 			const retrievedCode = await db.getStoredLessonData(courseId, lessonId);
-			console.log(retrievedCode);
 			if (retrievedCode) {
 				setEditorCode(retrievedCode.code);
 				setFrameCode(retrievedCode.code);

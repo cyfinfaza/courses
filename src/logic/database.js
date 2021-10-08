@@ -18,7 +18,7 @@ export default class DatabaseInterface {
 		);
 		window.supabase = this.supabase;
 		let sess = await this.supabase.auth.session();
-		console.log(sess);
+		// console.log(sess);
 		this.onSessionChange(sess);
 		this.sess = sess;
 		// this.refresh();
@@ -142,7 +142,6 @@ export default class DatabaseInterface {
 				.select("data")
 				.eq("course_id", courseId)
 				.eq("lesson_id", lessonId);
-			console.log(results);
 			// console.log("retrieved from supabase");
 			if (error) {
 				console.error(error);
@@ -162,7 +161,10 @@ export default class DatabaseInterface {
 			data: data,
 		};
 		if (this.sess) {
-			this.updateJobs[{ courseId, lessonId, table }] = { entry, table };
+			this.updateJobs[JSON.stringify({ courseId, lessonId, table })] = {
+				entry,
+				table,
+			};
 			this.onSaveStateChange("online_saving");
 		} else {
 			this.setLocally("lesson_work", { courseId, lessonId }, entry);
@@ -174,7 +176,6 @@ export default class DatabaseInterface {
 				.from("course_progress")
 				.select("data")
 				.eq("course_id", courseId);
-			console.log(results);
 			// console.log("retrieved from supabase");
 			if (error) {
 				console.error(error);
@@ -193,7 +194,7 @@ export default class DatabaseInterface {
 			data: data,
 		};
 		if (this.sess) {
-			this.updateJobs[{ courseId, table }] = { entry, table };
+			this.updateJobs[JSON.stringify({ courseId, table })] = { entry, table };
 			this.onSaveStateChange("online_saving");
 		} else {
 			this.setLocally("course_progress", { courseId }, entry);

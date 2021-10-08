@@ -14,7 +14,6 @@ const CoursePage = ({ data }) => {
 	const [lessonNumber, setLessonNumber] = useState(null);
 	const [LessonComponent, setLessonComponent] = useState(null);
 	useEffect(() => {
-		console.log(lessonNumber);
 		if (typeof lessonNumber === "number") {
 			setLessonComponent(
 				React.lazy(_ =>
