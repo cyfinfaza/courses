@@ -12,7 +12,7 @@ export default function ThreePartLayout({
 	db: { current: db },
 }) {
 	const [editorCode, setEditorCode] = useState(starterCode);
-	const [frameCode, setFrameCode] = useState();
+	const [frameCode, setFrameCode] = useState(starterCode);
 	const htmlFrameActions = useRef(null);
 	useEffect(() => {
 		let initFromDb = async () => {
