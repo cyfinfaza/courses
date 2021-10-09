@@ -1,0 +1,23 @@
+.card {
+	background-color: var(--foreground);
+	padding: var(--spacing);
+	border-radius: 6px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	// min-height: 200px;
+	> * {
+		display: flex;
+		flex-direction: column;
+		gap: calc(var(--spacing) * 0.5);
+		> * {
+			margin: 0;
+		}
+	}
+	> *:nth-child(1) {
+		align-items: flex-start;
+	}
+	> *:nth-child(2) {
+		align-items: flex-end;
+	}
+}

@@ -1,0 +1,24 @@
+.container {
+	padding: var(--spacing);
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing);
+	align-items: center;
+	box-sizing: border-box;
+	> * {
+		width: 100%;
+		max-width: 800px;
+	}
+}
+.header {
+	display: flex;
+	justify-content: space-between;
+}
+.headerLeft, .headerRight {
+	display: flex;
+	align-items: center;
+	gap: var(--spacing);
+	> * {
+		margin: 0;
+	}
+}

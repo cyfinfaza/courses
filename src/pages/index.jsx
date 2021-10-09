@@ -2,34 +2,90 @@ import * as React from "react";
 import { graphql } from "gatsby";
 import Button from "../ui-components/button";
 import AniLink from "gatsby-plugin-transition-link/AniLink";
+import Layout from "../ui-components/layout";
+import { useState, useEffect, useRef } from "react";
+import DatabaseInterface from "../logic/database";
+import * as pageStyle from "./index.module.scss";
 
 export default function IndexPage({ data }) {
+	const [session, setSession] = useState();
+	const [storedCourses, setStoredCourses] = useState();
+	const db = useRef();
+	useEffect(() => {
+		(async function () {
+			db.current && setStoredCourses(await db.current.getAllStoredCourses());
+		})();
+	}, [session]);
+	useEffect(function () {
+		async function effect() {
+			db.current = new DatabaseInterface(setSession);
+			await db.current.init();
+		}
+		effect();
+	}, []);
+	const Card = ({ children }) => (
+		<div className={pageStyle.card}>{children}</div>
+	);
 	return (
-		<div style={{ margin: "16px" }}>
-			<h1>Welcome.</h1>
-			This site is currently in development. Visit a course page for a sneak
-			peak at what's coming.
-			<h2>Please select a course</h2>
-			<ul>
+		<Layout db={db} session={session}>
+			<div style={{ textAlign: "center" }}>
+				<h1 className="title">
+					{session?.user
+						? "Hello, " + session.user.user_metadata.full_name
+						: "Welcome"}
+				</h1>
+				<p>
+					Cy2 Learn is a collection (or really just one at the moment) of
+					courses on topics I feel like I am ready to teach others, and that I
+					think others should know. It's built with{" "}
+					<a href="https://github.com/cyfinfaza/courses">
+						<code>courses</code>
+					</a>
+					, an open-source platform built from the ground up for interactive
+					software development education.
+				</p>
+				<h2>Please select a course</h2>
+			</div>
+			<div>
 				{data.allCourse.nodes.map(course => (
-					<li key={course.key}>
-						<h3>{course.title} </h3>
-						<small>
-							by <strong>{course.author}</strong>
-						</small>
-						<p>{course.description}</p>
-						<Button
-							icon="launch"
-							linksTo={course.link}
-							style={{ display: "inline-flex" }}
-							accent
-						>
-							Launch
-						</Button>
-					</li>
+					<Card key={course.key}>
+						<div>
+							<h2>{course.title} </h2>
+							<p>{course.description}</p>
+							{storedCourses &&
+								(_ => {
+									const storedCourse = storedCourses.filter(
+										c => c.id == course.id
+									)[0];
+									console.log(storedCourse);
+									return (
+										storedCourse.data && (
+											<small>
+												Last opened{" "}
+												{new Date(storedCourse.modified_at).toLocaleString()}{" "}
+												<br />
+												Working on: Lesson {storedCourse.data.lessonNumber +
+													1}{" "}
+												- {course.lessons[storedCourse.data.lessonNumber].title}
+											</small>
+										)
+									);
+								})()}
+						</div>
+						<div>
+							<Button
+								icon="launch"
+								linksTo={course.link}
+								style={{ display: "inline-flex" }}
+								accent
+							>
+								Launch
+							</Button>
+						</div>
+					</Card>
 				))}
-			</ul>
-		</div>
+			</div>
+		</Layout>
 	);
 }
 
@@ -42,6 +98,9 @@ export const query = graphql`
 				author
 				link
 				key
+				lessons {
+					title
+				}
 			}
 		}
 	}

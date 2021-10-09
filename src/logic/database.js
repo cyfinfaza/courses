@@ -200,6 +200,20 @@ export default class DatabaseInterface {
 			this.setLocally("course_progress", { courseId }, entry);
 		}
 	}
+	async getAllStoredCourses() {
+		if (this.sess) {
+			let { data: results, error } = await this.supabase
+				.from("course_progress")
+				.select("*");
+			if (error) {
+				console.error(error);
+			} else {
+				return results ? results : null;
+			}
+		}
+		const localData = localStorage.getItem("course_progress");
+		return localData ? Object.values(localData) : null;
+	}
 	logout() {
 		this.supabase.auth.signOut();
 		// window.location.reload()

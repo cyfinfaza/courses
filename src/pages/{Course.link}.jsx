@@ -68,6 +68,7 @@ const CoursePage = ({ data }) => {
 		<div className={pageStyle.container}>
 			<div className={pageStyle.headerBar}>
 				<div className={pageStyle.headerLeft}>
+					<img src="/logo.svg" alt="logo" style={{ height: "48px" }} />
 					<div className={pageStyle.controls}>
 						<Button
 							icon="chevron_left"
