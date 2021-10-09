@@ -150,7 +150,7 @@ export default class DatabaseInterface {
 			}
 		}
 		const localData = this.getLocally("lesson_work", { courseId, lessonId });
-		return localData ? JSON.parse(localData.data) : null;
+		return localData ? localData.data : null;
 	}
 	async setStoredLessonData(courseId, lessonId, data) {
 		const table = "lesson_work";
@@ -184,7 +184,7 @@ export default class DatabaseInterface {
 			}
 		}
 		const localData = this.getLocally("course_progress", { courseId });
-		return localData ? JSON.parse(localData.data) : null;
+		return localData ? localData.data : null;
 	}
 	async setStoredCourseData(courseId, data) {
 		const table = "course_progress";
