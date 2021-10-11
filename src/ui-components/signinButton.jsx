@@ -9,44 +9,49 @@ const SigninButton = ({ session, db }) => {
 		db.current.login(provider, window.location.href);
 	}
 	return (
-		<div
+		<div // eslint-disable-line jsx-a11y/no-static-element-interactions
 			className={componentStyle.container}
-			onBlur={event => {
-				if (!event.currentTarget.contains(event.relatedTarget)) {
+			onBlur={_ => {
+				if (
+					document.querySelector(`.${componentStyle.container}:focus-within`) ==
+					null
+				) {
 					setPopOutOpen(false);
 				}
 			}}
 		>
-			{session ? (
-				<Button
-					iconElement={
-						!popOutOpen && (
-							<img
-								src={session.user.user_metadata.avatar_url}
-								alt=""
-								className={componentStyle.buttonAvatarIcon}
-							/>
-						)
-					}
-					icon={popOutOpen && "expand_less"}
-					onClick={_ => setPopOutOpen(!popOutOpen)}
-				>
-					{popOutOpen ? "Close" : session.user.user_metadata.full_name}
-				</Button>
-			) : (
-				<Button
-					accent={!popOutOpen}
-					icon={popOutOpen ? "expand_less" : "login"}
-					onClick={_ => setPopOutOpen(!popOutOpen)}
-				>
-					{popOutOpen ? "Close" : "Sign In"}
-				</Button>
-			)}
+			{true &&
+				(session ? (
+					<Button
+						iconElement={
+							!popOutOpen && (
+								<img
+									src={session.user.user_metadata.avatar_url}
+									alt=""
+									className={componentStyle.buttonAvatarIcon}
+								/>
+							)
+						}
+						icon={popOutOpen && "expand_less"}
+						onClick={_ => setPopOutOpen(!popOutOpen)}
+					>
+						{popOutOpen ? "Close" : session.user.user_metadata.full_name}
+					</Button>
+				) : (
+					<Button
+						accent={!popOutOpen}
+						icon={popOutOpen ? "expand_less" : "login"}
+						onClick={_ => setPopOutOpen(!popOutOpen)}
+					>
+						{popOutOpen ? "Close" : "Sign In"}
+					</Button>
+				))}
 			<div
 				className={
 					componentStyle.popOut +
 					(popOutOpen ? " " + componentStyle.popOutOpen : "")
 				}
+				tabIndex="0" // eslint-disable-line jsx-a11y/no-noninteractive-tabindex
 			>
 				{session ? (
 					<div className="vertiPanel">

@@ -1,5 +1,4 @@
 import React from "react";
-import Button from "./button";
 import * as componentStyle from "./layout.module.scss";
 import SigninButton from "./signinButton";
 
