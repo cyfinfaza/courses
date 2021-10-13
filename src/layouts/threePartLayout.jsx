@@ -1,16 +1,12 @@
 import React from "react";
 import * as layoutStyle from "./threePartLayout.module.scss";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
 import Editor from "../environments/editor";
 import HtmlFrame from "../environments/htmlFrame";
+import { DbContext } from "../logic/database";
 
-export default function ThreePartLayout({
-	directions,
-	starterCode,
-	courseId,
-	lessonId,
-	db: { current: db },
-}) {
+export default function ThreePartLayout({ directions, starterCode, lessonId }) {
+	const { db, courseId } = useContext(DbContext);
 	const [editorCode, setEditorCode] = useState(starterCode);
 	const [frameCode, setFrameCode] = useState(starterCode);
 	const htmlFrameActions = useRef(null);
@@ -33,11 +29,11 @@ export default function ThreePartLayout({
 			initFromDb = null;
 			onLogout = null;
 		};
-	}, [db]);
+	}, [db, courseId, lessonId, starterCode]);
 	useEffect(() => {
 		// console.log(editorCode);
 		db.setStoredLessonData(courseId, lessonId, { code: editorCode });
-	}, [editorCode]);
+	}, [editorCode, courseId, db, lessonId]);
 	return (
 		<>
 			<div className={layoutStyle.container}>
@@ -47,7 +43,7 @@ export default function ThreePartLayout({
 						language="html"
 						initialCode={editorCode}
 						onChange={code => setEditorCode(code)}
-						revertButton={editorCode != starterCode}
+						revertButton={editorCode !== starterCode}
 						onRevert={_ => {
 							setEditorCode(starterCode);
 							setFrameCode(starterCode);

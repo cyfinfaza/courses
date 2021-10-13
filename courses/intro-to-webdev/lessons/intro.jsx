@@ -4,10 +4,9 @@ import cubeCode from "./cubeCode";
 
 const id = "647320ad-037f-4bd4-b144-89370474ccf9";
 
-export default function Lesson(props) {
+export default function Lesson() {
 	return (
 		<ThreePartLayout
-			{...props}
 			lessonId={id}
 			directions={
 				<>

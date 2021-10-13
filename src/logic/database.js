@@ -1,4 +1,11 @@
 import { createClient } from "@supabase/supabase-js";
+import { createContext } from "react";
+
+export const DbContext = createContext({
+	session: null,
+	db: null,
+	savedStatus: null,
+});
 
 export default class DatabaseInterface {
 	constructor(sessionChangeCallback, saveStateChangeCallback) {

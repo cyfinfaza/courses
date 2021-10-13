@@ -3,7 +3,7 @@ import Button from "../ui-components/button";
 import * as pageStyle from "./course.module.scss";
 import { graphql } from "gatsby";
 import { useState, useEffect, useRef } from "react";
-import DatabaseInterface from "../logic/database";
+import DatabaseInterface, { DbContext } from "../logic/database";
 import SigninButton from "../ui-components/signinButton";
 import StatusDot from "../ui-components/statusDot";
 
@@ -25,7 +25,7 @@ const CoursePage = ({ data }) => {
 			);
 			db.current.setStoredCourseData(course.id, { lessonNumber });
 		}
-	}, [lessonNumber]);
+	}, [lessonNumber, course.id, course.lessons]);
 	const [session, setSession] = useState(null);
 	const savedStatuses = {
 		local_saved: {
@@ -43,19 +43,22 @@ const CoursePage = ({ data }) => {
 	};
 	const [savedStatus, setSavedStatus] = useState("local_saved");
 	const db = useRef();
-	useEffect(function () {
-		async function effect() {
-			db.current = new DatabaseInterface(setSession, setSavedStatus);
-			await db.current.init();
-			const courseStatus = await db.current.getStoredCourseData(course.id);
-			if (courseStatus) {
-				setLessonNumber(courseStatus.lessonNumber);
-			} else {
-				setLessonNumber(0);
+	useEffect(
+		function () {
+			async function effect() {
+				db.current = new DatabaseInterface(setSession, setSavedStatus);
+				await db.current.init();
+				const courseStatus = await db.current.getStoredCourseData(course.id);
+				if (courseStatus) {
+					setLessonNumber(courseStatus.lessonNumber);
+				} else {
+					setLessonNumber(0);
+				}
 			}
-		}
-		effect();
-	}, []);
+			effect();
+		},
+		[course.id]
+	);
 	function incrementLesson(howMuch) {
 		const index = lessonNumber + howMuch;
 		if (course.lessons[index]) {
@@ -102,13 +105,18 @@ const CoursePage = ({ data }) => {
 					<SigninButton session={session} db={db} />
 				</div>
 			</div>
-			{isBrowser && LessonComponent ? (
-				<React.Suspense fallback={<span></span>}>
-					<LessonComponent db={db} session={session} courseId={course.id} />
-				</React.Suspense>
-			) : (
-				<span></span>
-			)}
+			<DbContext.Provider
+				value={{ session, savedStatus, db: db.current, courseId: course.id }}
+			>
+				{isBrowser && LessonComponent ? (
+					<React.Suspense fallback={<span></span>}>
+						{/* <LessonComponent db={db} session={session} courseId={course.id} /> */}
+						<LessonComponent />
+					</React.Suspense>
+				) : (
+					<span></span>
+				)}
+			</DbContext.Provider>
 		</div>
 	);
 };
