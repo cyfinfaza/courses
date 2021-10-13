@@ -2,7 +2,7 @@ import React from "react";
 import MonacoEditor from "@monaco-editor/react";
 import * as componentStyle from "./editor.module.css";
 import Button from "../ui-components/button";
-import { useState, useRef } from "react";
+import { useRef } from "react";
 import HotkeyLabel from "../ui-components/hotkeyLabel";
 
 export default function Editor({
@@ -13,12 +13,12 @@ export default function Editor({
 	onRevert,
 	revertButton,
 }) {
-	const [editorCode, setEditorCode] = useState(null);
 	const editorRef = useRef(null);
 	const run = _ => onRun && onRun(editorRef.current.getValue());
 	return (
-		<div
+		<div // eslint-disable-line jsx-a11y/no-noninteractive-element-interactions
 			className={componentStyle.container}
+			role="application" // TODO: find the right way to do this
 			onKeyDown={event => {
 				if (event.ctrlKey && event.key === "s") {
 					event.preventDefault();

@@ -1,7 +1,6 @@
 import * as React from "react";
 import { graphql } from "gatsby";
 import Button from "../ui-components/button";
-import AniLink from "gatsby-plugin-transition-link/AniLink";
 import Layout from "../ui-components/layout";
 import { useState, useEffect, useRef } from "react";
 import DatabaseInterface from "../logic/database";
@@ -55,7 +54,7 @@ export default function IndexPage({ data }) {
 							{storedCourses &&
 								(_ => {
 									const storedCourse = storedCourses.filter(
-										c => c.id == course.id
+										c => c.id === course.id
 									)[0];
 									console.log(storedCourse);
 									return (

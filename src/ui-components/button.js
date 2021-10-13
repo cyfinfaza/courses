@@ -1,6 +1,6 @@
 import React from "react";
 import * as componentStyle from "./inputs.module.scss";
-import { Link } from "gatsby";
+// import { Link } from "gatsby";
 import AniLink from "gatsby-plugin-transition-link/AniLink";
 import { useState } from "react";
 

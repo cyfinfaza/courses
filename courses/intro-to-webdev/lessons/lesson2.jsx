@@ -1,5 +1,5 @@
 import React from "react";
-import ThreePartLayout from "/src/layouts/threePartLayout";
+import ThreePartLayout from "layouts/threePartLayout";
 
 export const id = "97eda484-4211-461e-83dc-6b395f04e2e1";
 

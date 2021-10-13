@@ -12,9 +12,12 @@ export default function HtmlFrame({
 	function refresh() {
 		frameRef.current.contentWindow.location.reload();
 	}
-	useEffect(_ => {
-		onActionsReady && onActionsReady({ refresh });
-	}, []);
+	useEffect(
+		_ => {
+			onActionsReady && onActionsReady({ refresh });
+		},
+		[onActionsReady]
+	);
 	return (
 		<iframe
 			srcDoc={code}
