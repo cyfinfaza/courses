@@ -3,7 +3,7 @@
 	height: 50px;
 	align-items: center;
 	padding: 12px;
-	border-radius: 6px;
+	border-radius: var(--inner-radius);
 	border: solid 1px;
 	// cursor: pointer;
 	transition: --local-text-color 240ms, background-color 240ms;

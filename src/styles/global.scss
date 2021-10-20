@@ -3,11 +3,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,700;1,400&display=swap');
 
 
 body {
 	--background: #000;
-	--foreground: #3338;
+	--foreground: #2228;
 	// --foreground-opaque: #1a1a1a;
 	--foreground-border: #fff4;
 	--foreground-hover: #fff4;
@@ -18,16 +19,45 @@ body {
 	--accent: hsl(138, 93%, 51%);
 	// --accent-foreground-pressed: hsl(138, 93%, 10%);
 	--accent-foreground-pressed: hsla(138, 93%, 51%, 20%);
-	--accent-foreground-hover: #0008;
+	--accent-foreground-hover: #1118;
 	--accent-text: #000;
 	--alert: hsl(0, 100%, 50%);
 	--alert-foreground-pressed: hsl(0, 100%, 10%);
-	--alert-foreground-hover: #0008;
+	--alert-foreground-hover: #1118;
 	--alert-text: #000;
 	--warning: hsl(45deg, 100%, 50%);
 	--ready: hsl(120deg, 100%, 50%);
-	--acrylic-backdrop: blur(16px) saturate(180%);
-	--spacing: 16px;
+	--acrylic-backdrop: blur(16px) saturate(180%) brightness(60%);
+	--spacing: 12px;
+	--inner-radius: 8px;
+	--outer-radius: calc(var(--inner-radius) + var(--spacing));
+}
+
+body.color-light {
+	--background: #fff;
+	--foreground: #ccc8;
+	// --foreground-opaque: #1a1a1a;
+	--foreground-border: #0004;
+	--foreground-hover: #0004;
+	--foreground-border-hover: #0006;
+	--foreground-pressed: #0003;
+	--foreground-border-pressed: #0005;
+	--text: #000;
+	--accent: hsl(138, 81%, 51%);
+	// --accent-foreground-pressed: hsl(138, 93%, 10%);
+	--accent-foreground-pressed: hsla(138, 93%, 51%, 20%);
+	--accent-foreground-hover: #1118;
+	--accent-text: #000;
+	--alert: hsl(0, 100%, 50%);
+	--alert-foreground-pressed: hsl(0, 100%, 10%);
+	--alert-foreground-hover: #1118;
+	--alert-text: #000;
+	--warning: hsl(45deg, 100%, 50%);
+	--ready: hsl(120deg, 100%, 50%);
+	--acrylic-backdrop: blur(16px) saturate(180%) brightness(60%);
+	--spacing: 12px;
+	--inner-radius: 8px;
+	--outer-radius: calc(var(--inner-radius) + var(--spacing));
 }
 
 // @supports (backdrop-filter: blur(16px) saturate(180%)) {
@@ -50,6 +80,11 @@ body{
 body, input, button, textarea, select, a {
 	font-family: "Lexend", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 	color: var(--text);
+}
+
+::selection {
+	background: var(--accent);
+	color: var(--accent-text);
 }
 
 button{

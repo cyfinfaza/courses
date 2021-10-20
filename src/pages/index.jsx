@@ -5,6 +5,7 @@ import Layout from "../ui-components/layout";
 import { useState, useEffect, useRef } from "react";
 import DatabaseInterface from "../logic/database";
 import * as pageStyle from "./index.module.scss";
+import ReactTimeago from "react-timeago";
 
 export default function IndexPage({ data }) {
 	const [session, setSession] = useState();
@@ -19,6 +20,7 @@ export default function IndexPage({ data }) {
 		async function effect() {
 			db.current = new DatabaseInterface(setSession);
 			await db.current.init();
+			setStoredCourses(await db.current.getAllStoredCourses());
 		}
 		effect();
 	}, []);
@@ -48,9 +50,14 @@ export default function IndexPage({ data }) {
 			<div>
 				{data.allCourse.nodes.map(course => (
 					<Card key={course.key}>
-						<div>
+						<div
+							className="vertiPanel"
+							style={{ gap: "calc(var(--spacing) * 0.5)" }}
+						>
 							<h2>{course.title} </h2>
 							<p>{course.description}</p>
+						</div>
+						<div className="horizPanel">
 							{storedCourses &&
 								(_ => {
 									const storedCourse = storedCourses.filter(
@@ -59,19 +66,25 @@ export default function IndexPage({ data }) {
 									console.log(storedCourse);
 									return (
 										storedCourse.data && (
-											<small>
-												Last opened{" "}
+											<small style={{ textAlign: "right" }}>
+												{/* Last opened{" "}
 												{new Date(storedCourse.modified_at).toLocaleString()}{" "}
 												<br />
 												Working on: Lesson {storedCourse.data.lessonNumber +
 													1}{" "}
-												- {course.lessons[storedCourse.data.lessonNumber].title}
+												- {course.lessons[storedCourse.data.lessonNumber].title} */}
+												<span style={{ fontStyle: "italic" }}>
+													{course.lessons[storedCourse.data.lessonNumber].title}
+												</span>
+												<br />{" "}
+												<ReactTimeago
+													date={new Date(storedCourse.modified_at)}
+													minPeriod={60}
+												/>
 											</small>
 										)
 									);
 								})()}
-						</div>
-						<div>
 							<Button
 								icon="launch"
 								linksTo={course.link}

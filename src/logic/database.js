@@ -215,10 +215,11 @@ export default class DatabaseInterface {
 			if (error) {
 				console.error(error);
 			} else {
+				console.log("everything is fine ", results);
 				return results ? results : null;
 			}
 		}
-		const localData = localStorage.getItem("course_progress");
+		const localData = JSON.parse(localStorage.getItem("course_progress"));
 		return localData ? Object.values(localData) : null;
 	}
 	logout() {

@@ -18,9 +18,11 @@
 	top: 50px;
 	right: 0;
 	background-color: var(--foreground);
+	border: solid 2px var(--foreground);
 	backdrop-filter: var(--acrylic-backdrop);
 	padding: var(--spacing);
-	border-radius: 6px;
+	// border-radius: var(--inner-radius);
+	border-radius: calc(var(--inner-radius) + var(--spacing));
 	margin-top: calc(var(--spacing) * 0.75);
 	transition: 120ms;
 	opacity: 0;
