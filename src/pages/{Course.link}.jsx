@@ -6,6 +6,7 @@ import { useState, useEffect, useRef } from "react";
 import DatabaseInterface, { DbContext } from "../logic/database";
 import SigninButton from "../ui-components/signinButton";
 import StatusDot from "../ui-components/statusDot";
+import Head from "../ui-components/head";
 
 const isBrowser = typeof window !== "undefined";
 
@@ -68,56 +69,65 @@ const CoursePage = ({ data }) => {
 		return false;
 	}
 	return (
-		<div className={pageStyle.container}>
-			<div className={pageStyle.headerBar}>
-				<div className={pageStyle.headerLeft}>
-					<img src="/logo.svg" alt="logo" style={{ height: "48px" }} />
-					<div className={pageStyle.controls}>
-						<Button
-							icon="chevron_left"
-							onClick={_ => incrementLesson(-1)}
-						></Button>
-						<Button
-							icon="chevron_right"
-							accent
-							onClick={_ => incrementLesson(1)}
-						></Button>
-					</div>
-					<div className={pageStyle.titles}>
-						<div className="horizPanel">
-							<span className={pageStyle.courseTitle}>{course.title}</span>
-							<div className={pageStyle.statusIndicator}>
-								<StatusDot status={savedStatuses[savedStatus].dot} />
-								<span>{savedStatuses[savedStatus].message}</span>
-							</div>
+		<>
+			<Head
+				title={`${course.title}${
+					course.lessons[lessonNumber]?.title
+						? ": " + course.lessons[lessonNumber].title
+						: ""
+				}`}
+			/>
+			<div className={pageStyle.container}>
+				<div className={pageStyle.headerBar}>
+					<div className={pageStyle.headerLeft}>
+						<img src="/logo.svg" alt="logo" style={{ height: "48px" }} />
+						<div className={pageStyle.controls}>
+							<Button
+								icon="chevron_left"
+								onClick={_ => incrementLesson(-1)}
+							></Button>
+							<Button
+								icon="chevron_right"
+								accent
+								onClick={_ => incrementLesson(1)}
+							></Button>
 						</div>
-						<span className={pageStyle.lessonName}>
-							{typeof lessonNumber === "number"
-								? course.lessons[lessonNumber].title
-								: "-"}
-						</span>
+						<div className={pageStyle.titles}>
+							<div className="horizPanel">
+								<span className={pageStyle.courseTitle}>{course.title}</span>
+								<div className={pageStyle.statusIndicator}>
+									<StatusDot status={savedStatuses[savedStatus].dot} />
+									<span>{savedStatuses[savedStatus].message}</span>
+								</div>
+							</div>
+							<span className={pageStyle.lessonName}>
+								{typeof lessonNumber === "number"
+									? course.lessons[lessonNumber].title
+									: "-"}
+							</span>
+						</div>
+					</div>
+					<div className={pageStyle.options}>
+						<Button icon="home" linksTo="/">
+							Home
+						</Button>
+						<SigninButton session={session} db={db} />
 					</div>
 				</div>
-				<div className={pageStyle.options}>
-					<Button icon="home" linksTo="/">
-						Home
-					</Button>
-					<SigninButton session={session} db={db} />
-				</div>
+				<DbContext.Provider
+					value={{ session, savedStatus, db: db.current, courseId: course.id }}
+				>
+					{isBrowser && LessonComponent ? (
+						<React.Suspense fallback={<span></span>}>
+							{/* <LessonComponent db={db} session={session} courseId={course.id} /> */}
+							<LessonComponent />
+						</React.Suspense>
+					) : (
+						<span></span>
+					)}
+				</DbContext.Provider>
 			</div>
-			<DbContext.Provider
-				value={{ session, savedStatus, db: db.current, courseId: course.id }}
-			>
-				{isBrowser && LessonComponent ? (
-					<React.Suspense fallback={<span></span>}>
-						{/* <LessonComponent db={db} session={session} courseId={course.id} /> */}
-						<LessonComponent />
-					</React.Suspense>
-				) : (
-					<span></span>
-				)}
-			</DbContext.Provider>
-		</div>
+		</>
 	);
 };
 
