@@ -14,6 +14,17 @@ const CoursePage = ({ data }) => {
 	const { course } = data;
 	const [lessonNumber, setLessonNumber] = useState(null);
 	const [LessonComponent, setLessonComponent] = useState(null);
+	let viewModeId;
+	if (isBrowser) {
+		viewModeId = parseInt(
+			new URLSearchParams(window.location.search).get("view")
+		);
+		if (viewModeId >= course.lessons.length) {
+			viewModeId = null;
+			// return <h1>Not Found</h1>;
+		}
+	}
+	console.log(viewModeId);
 	useEffect(() => {
 		if (typeof lessonNumber === "number") {
 			setLessonComponent(
@@ -49,11 +60,15 @@ const CoursePage = ({ data }) => {
 			async function effect() {
 				db.current = new DatabaseInterface(setSession, setSavedStatus);
 				await db.current.init();
-				const courseStatus = await db.current.getStoredCourseData(course.id);
-				if (courseStatus) {
-					setLessonNumber(courseStatus.lessonNumber);
+				if (!viewModeId) {
+					const courseStatus = await db.current.getStoredCourseData(course.id);
+					if (courseStatus) {
+						setLessonNumber(courseStatus.lessonNumber);
+					} else {
+						setLessonNumber(0);
+					}
 				} else {
-					setLessonNumber(0);
+					setLessonNumber(viewModeId);
 				}
 			}
 			effect();
@@ -67,6 +82,27 @@ const CoursePage = ({ data }) => {
 			return true;
 		}
 		return false;
+	}
+	if (typeof viewModeId == "number" && viewModeId >= 0) {
+		return (
+			<DbContext.Provider
+				value={{
+					session,
+					savedStatus,
+					db: db.current,
+					courseId: course.id,
+					viewMode: true,
+				}}
+			>
+				{isBrowser && LessonComponent ? (
+					<React.Suspense fallback={<span></span>}>
+						<LessonComponent />
+					</React.Suspense>
+				) : (
+					<span></span>
+				)}
+			</DbContext.Provider>
+		);
 	}
 	return (
 		<>
@@ -115,7 +151,13 @@ const CoursePage = ({ data }) => {
 					</div>
 				</div>
 				<DbContext.Provider
-					value={{ session, savedStatus, db: db.current, courseId: course.id }}
+					value={{
+						session,
+						savedStatus,
+						db: db.current,
+						courseId: course.id,
+						viewMode: false,
+					}}
 				>
 					{isBrowser && LessonComponent ? (
 						<React.Suspense fallback={<span></span>}>

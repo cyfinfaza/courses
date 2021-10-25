@@ -6,7 +6,8 @@ import HtmlFrame from "../environments/htmlFrame";
 import { DbContext } from "../logic/database";
 
 export default function ThreePartLayout({ directions, starterCode, lessonId }) {
-	const { db, courseId } = useContext(DbContext);
+	const { db, courseId, viewMode } = useContext(DbContext);
+	console.log(viewMode);
 	const [editorCode, setEditorCode] = useState(starterCode);
 	const [frameCode, setFrameCode] = useState(starterCode);
 	const htmlFrameActions = useRef(null);
@@ -14,8 +15,23 @@ export default function ThreePartLayout({ directions, starterCode, lessonId }) {
 		let initFromDb = async () => {
 			const retrievedCode = await db.getStoredLessonData(courseId, lessonId);
 			if (retrievedCode) {
-				setEditorCode(retrievedCode.code);
-				setFrameCode(retrievedCode.code);
+				if (viewMode) {
+					console.log("replacing with ", retrievedCode);
+					// const blob = new Blob([retrievedCode.code], { type: "text/html" });
+					// const url = URL.createObjectURL(blob);
+					// window.open(url, "_self");
+					// document.body.parentElement.innerHTML = retrievedCode.code;
+					document.write(retrievedCode.code);
+					document.close();
+					// setTimeout(() => {
+					// 	document.open();
+					// 	document.write(retrievedCode.code);
+					// 	document.close();
+					// }, 2000);
+				} else {
+					setEditorCode(retrievedCode.code);
+					setFrameCode(retrievedCode.code);
+				}
 			}
 		};
 		let onLogout = () => {
@@ -34,6 +50,9 @@ export default function ThreePartLayout({ directions, starterCode, lessonId }) {
 		// console.log(editorCode);
 		db.setStoredLessonData(courseId, lessonId, { code: editorCode });
 	}, [editorCode, courseId, db, lessonId]);
+	if (viewMode) {
+		return <p>Loading...</p>;
+	}
 	return (
 		<>
 			<div className={layoutStyle.container}>
